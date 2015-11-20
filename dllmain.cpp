@@ -1,5 +1,5 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
-#include "stdafx.h"
+#include "dllmain.h"
 
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
@@ -15,11 +15,6 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 		break;
 	}
 	return TRUE;
-}
-// test ingame : hint ("Arma_db" callExtension "");
-extern "C"
-{
-	__declspec (dllexport) void __stdcall RVExtension(char *output, int outputSize, const char *function);
 }
 
 void __stdcall RVExtension(char *output, int outputSize, const char *function)
