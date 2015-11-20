@@ -16,7 +16,6 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 	}
 	return TRUE;
 }
-
 // test ingame : hint ("Arma_db" callExtension "");
 extern "C"
 {
