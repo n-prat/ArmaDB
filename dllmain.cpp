@@ -24,5 +24,5 @@ extern "C"
 
 void __stdcall RVExtension(char *output, int outputSize, const char *function)
 {
-	strncpy_s(output, outputSize, "Hello WoRlD!", _TRUNCATE);
+	strncpy_s(output, outputSize, "Hello World!!", _TRUNCATE);
 }
