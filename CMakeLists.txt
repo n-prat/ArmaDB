@@ -16,7 +16,7 @@ source_group("Headers" FILES ${MY_HDRS})
 add_library(armadb SHARED sqlite3/sqlite3.c ${MY_SRC} ${MY_HDRS})
 
 
-add_subdirectory (sqlite3)
+#add_subdirectory (sqlite3)
 
 
 include_external_msproject(UnitTest3 ${PROJECT_SOURCE_DIR}/UnitTest3/UnitTest3.vcxproj)

@@ -61,7 +61,8 @@ namespace UnitTest3
 			Assert::AreEqual(3, fields.size(), 0.01, L"split_to_container failed", LINE_INFO());
 		}
 
-		TEST_METHOD(TEST_sqlite_open_close)
+		
+		/*TEST_METHOD(TEST_sqlite_open_close)
 		{
 			sqlite3 *db;
 			char *zErrMsg = 0;
@@ -77,6 +78,6 @@ namespace UnitTest3
 			sqlite3_close(db);
 
 			Assert::AreEqual(ok.c_str(), res.c_str(), 0.01, L"sqlite_open_close failed", LINE_INFO());
-		}
+		}*/
 	};
 }
