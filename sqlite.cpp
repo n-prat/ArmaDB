@@ -14,11 +14,10 @@ sqlite::~sqlite()
 {
 }
 
-void sqlite::setup_open(std::string filename)
-{
-	const char *zVfs;
+int sqlite::setup_open(std::string filename)
+{	
 
-	int rc = sqlite3_open_v2(filename.c_str(), &db, SQLITE_OPEN_READWRITE, zVfs);
+	rc = sqlite3_open_v2(filename.c_str(), &db, SQLITE_OPEN_READWRITE, nullptr);
 	if (rc) {
 		// Error opening DB
 		sqlite3_close(db);
@@ -26,13 +25,13 @@ void sqlite::setup_open(std::string filename)
 
 	// TODO
 	// stuff
+	return 0;
 }
 
-void sqlite::setup_create(std::string filename)
-{
-	const char *zVfs;
+int sqlite::setup_create(std::string filename)
+{	
 
-	int rc = sqlite3_open_v2(filename.c_str(), &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE,zVfs);
+	rc = sqlite3_open_v2(filename.c_str(), &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE,nullptr);
 	if (rc) {
 		// Error opening DB
 		sqlite3_close(db);
@@ -40,4 +39,16 @@ void sqlite::setup_create(std::string filename)
 
 	// TODO
 	// stuff
+	return 0;
+}
+
+int sqlite::close_db()
+{
+	int rc = sqlite3_close(db);
+	return 0;
+}
+
+const char * sqlite::get_err_msg()
+{
+	return sqlite3_errstr(rc);
 }

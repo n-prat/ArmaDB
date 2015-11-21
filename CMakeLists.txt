@@ -14,6 +14,7 @@ file(GLOB MY_HDRS "*.h")
 file(GLOB MY_SRC "*.cpp")
 source_group("Headers" FILES ${MY_HDRS})
 add_library(armadb SHARED sqlite3/sqlite3.c ${MY_SRC} ${MY_HDRS})
+add_library(armadb_static STATIC sqlite3/sqlite3.c ${MY_SRC} ${MY_HDRS}) # needed for unit tests
 
 
 #add_subdirectory (sqlite3)
