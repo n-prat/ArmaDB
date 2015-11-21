@@ -22,7 +22,8 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 
 void __stdcall RVExtension(char *output, int outputSize, const char *function)
 {
-	sqlite sq();
+	sqlite sq;
+	std::string out("");
 
 	// Split function on delimiter ":"
 	std::string str_args(function);
@@ -36,14 +37,39 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function)
 	if (nb_args == 0) {
 		// Hello World if empty
 		LOG(DEBUG) << "Hello World!!";
-		strncpy_s(output, outputSize, "Hello World!!", _TRUNCATE);
+		//strncpy_s(output, outputSize, "Hello World!!", _TRUNCATE);
+		out = "Hello World!!";
 	}
-	else {		
-		char buffer[50];
+	else if (nb_args == 2) {
+		//		input : "OPEN:filename"
+		// or	input : "OPENCREATE:filename"
+		if (args[0].compare("OPEN") == 0) {
+			if (sq.setup_open(args[1])) {
+				std::string msg(sq.get_err_msg());
+				out = "SETUP error: " + msg;
+			}
+		}
+		else if (args[0].compare("OPENCREATE") == 0) {
+			if (sq.setup_create(args[1])) {
+				std::string msg(sq.get_err_msg());
+				out = "SETUP error: " + msg;
+			}			
+		}
+		else {			
+			out = "SETUP command invalid: USAGE: OPEN:filename or OPENCREATE:filename";
+		}
+	}
+	else if (nb_args == 3) {
+		//		input : "SQL:SIMPLE:statement"
+		// or	input : "SQL:QUERY:statement"
+	}
+	else {				
 		std::string debug(function);
-		LOG(ERROR) << "INPUT not recognized: " << debug;
-		strncpy_s(output, outputSize, "INPUT not recognized", _TRUNCATE);
-	}
+		LOG(ERROR) << "INPUT not recognized " << debug;
+		out = "INPUT not recognized";
+	}	
 	
+	// Send back the result
+	strncpy_s(output, outputSize, out.c_str(), _TRUNCATE);
 }
 

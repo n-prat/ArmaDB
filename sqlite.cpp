@@ -5,8 +5,8 @@
 sqlite::sqlite()
 {
 	db = NULL;
-	char *zErrMsg = "";
-	int rc = 0;
+	char *zErrMsg = "error";
+	int rc = -1;
 }
 
 

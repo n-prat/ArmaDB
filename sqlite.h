@@ -16,6 +16,8 @@ public:
 	const char * get_err_msg();
 
 	int exec_simple(const char *sql);
+
+	int get_rc() { return rc; }
 private:
 	sqlite3 *db;
 	char *zErrMsg;

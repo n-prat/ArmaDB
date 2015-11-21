@@ -36,6 +36,30 @@ namespace UnitTest3
 			Assert::AreEqual("INPUT not recognized", out, 0.01, L"too_many_args failed", LINE_INFO());
 		}
 
+		TEST_METHOD(two_args_not_valid)
+		{
+			char out[100], fun[] = "sdf:aze";
+			int outSize = 100;
+			RVExtension(out, outSize, fun);
+			Assert::AreEqual("SETUP command invalid: USAGE: OPEN:filename or OPENCREATE:filename", out, 0.01, L"two_args_not_valid failed", LINE_INFO());
+		}
+
+		TEST_METHOD(two_args_valid1)
+		{
+			char out[100], fun[] = "OPEN:filename";
+			int outSize = 100;
+			RVExtension(out, outSize, fun);
+			Assert::AreEqual("", out, 0.01, L"two_args_valid1 failed", LINE_INFO());
+		}
+
+		TEST_METHOD(two_args_valid2)
+		{
+			char out[100], fun[] = "OPENCREATE:filename";
+			int outSize = 100;
+			RVExtension(out, outSize, fun);
+			Assert::AreEqual("", out, 0.01, L"two_args_valid2 failed", LINE_INFO());
+		}
+
 		TEST_METHOD(split_to_container_1)
 		{			
 			const char *function = "dfgfd:xcwb:poiuyt:dsgf";
