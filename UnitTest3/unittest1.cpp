@@ -29,7 +29,15 @@ namespace UnitTest3
 				L"Hello World failed",
 				// Line number - used if there is no PDB file:
 				LINE_INFO());
-		}		
+		}
+
+		TEST_METHOD(TEST_too_many_args)
+		{
+			char out[50], fun[] = "sdf:aze:hg:xcv:jgh:oiu:qsd:xcv:ytuiy:sdfsfdg";
+			int outSize = 50;
+			RVExtension(out, outSize, fun);
+			Assert::AreEqual("INPUT not recognized", out, 0.01, L"too_many_args failed", LINE_INFO());
+		}
 
 		TEST_METHOD(TEST_split_to_container_1)
 		{			

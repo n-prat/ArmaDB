@@ -2,6 +2,8 @@
 
 #include "dllmain.h"
 
+INITIALIZE_EASYLOGGINGPP
+
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
                        LPVOID lpReserved
@@ -28,14 +30,17 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function)
 	split_to_container(args, str_args, ":", split::no_empties);	
 	int nb_args = args.size();
 
-	// Hello World : empty argument
+	// Parse argument
 	if (nb_args == 0) {
+		// Hello World if empty
+		LOG(DEBUG) << "Hello World!!";
 		strncpy_s(output, outputSize, "Hello World!!", _TRUNCATE);
 	}
 	else {		
 		char buffer[50];
-		sprintf(buffer, "Unknown: input size = %d", nb_args);
-		strncpy_s(output, outputSize, buffer, _TRUNCATE);
+		std::string debug(function);
+		LOG(ERROR) << "INPUT not recognized: " << debug;
+		strncpy_s(output, outputSize, "INPUT not recognized", _TRUNCATE);
 	}
 	
 }
