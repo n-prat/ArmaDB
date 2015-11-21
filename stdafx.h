@@ -14,3 +14,8 @@
 
 
 // TODO: reference additional headers your program requires here
+#include <string>
+#include <vector>
+#include <cstddef>
+
+#include "./sqlite3/sqlite3.h"
