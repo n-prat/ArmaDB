@@ -22,6 +22,8 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 
 void __stdcall RVExtension(char *output, int outputSize, const char *function)
 {
+	sqlite sq();
+
 	// Split function on delimiter ":"
 	std::string str_args(function);
 

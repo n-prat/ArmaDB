@@ -9,9 +9,11 @@ set(CMAKE_CXX_FLAGS -m32)
 
 include_directories("${PROJECT_BINARY_DIR}")
 include_directories("${PROJECT_SOURCE_DIR}")
+include_directories("${PROJECT_SOURCE_DIR}/sqlite3")
 file(GLOB MY_HDRS "*.h")
+file(GLOB MY_SRC "*.cpp")
 source_group("Headers" FILES ${MY_HDRS})
-add_library(armadb SHARED dllmain.cpp ${MY_HDRS})
+add_library(armadb SHARED sqlite3/sqlite3.c ${MY_SRC} ${MY_HDRS})
 
 
 add_subdirectory (sqlite3)
