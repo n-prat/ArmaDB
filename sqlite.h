@@ -14,6 +14,8 @@ public:
 
 	int close_db();
 	const char * get_err_msg();
+
+	int exec_simple(const char *sql);
 private:
 	sqlite3 *db;
 	char *zErrMsg;

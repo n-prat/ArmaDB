@@ -44,11 +44,19 @@ int sqlite::setup_create(std::string filename)
 
 int sqlite::close_db()
 {
-	int rc = sqlite3_close(db);
+	rc = sqlite3_close(db);
 	return 0;
 }
 
 const char * sqlite::get_err_msg()
 {
 	return sqlite3_errstr(rc);
+}
+
+// no values will be returned, no callback, etc
+// mostly for testing
+int sqlite::exec_simple(const char * sql)
+{
+	rc = sqlite3_exec(db, sql, nullptr, nullptr, nullptr);
+	return 0;
 }
