@@ -170,6 +170,9 @@
     <ProjectReference Include="..\build\armadb.vcxproj">
       <Project>{bc0f39ab-71ae-3ee4-a5a9-de71c94c9fd3}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\build\sqlite3\sqlite.vcxproj">
+      <Project>{7679c033-982d-3266-87fc-9217123f2ed0}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
