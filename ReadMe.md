@@ -3,6 +3,8 @@
 * git clone
 * mkdir build && cd build
 * cmake ..
+ * -DWITH_TESTLIB=ON : build test project for VisualStudio
+ * -DWITH_A3DLLPROXY=ON : build Dll for use with A3DLLPROXY
 * open sln in VS
 * build RELEASE win32
 

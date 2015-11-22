@@ -25,7 +25,7 @@ int sqlite::setup_open(std::string filename)
 
 	// TODO
 	// stuff
-	return 0;
+	return rc;
 }
 
 int sqlite::setup_create(std::string filename)
@@ -39,13 +39,13 @@ int sqlite::setup_create(std::string filename)
 
 	// TODO
 	// stuff
-	return 0;
+	return rc;
 }
 
 int sqlite::close_db()
 {
 	rc = sqlite3_close(db);
-	return 0;
+	return rc;
 }
 
 const char * sqlite::get_err_msg()
@@ -58,5 +58,5 @@ const char * sqlite::get_err_msg()
 int sqlite::exec_simple(const char * sql)
 {
 	rc = sqlite3_exec(db, sql, nullptr, nullptr, nullptr);
-	return 0;
+	return rc;
 }

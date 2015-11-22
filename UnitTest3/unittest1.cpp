@@ -129,7 +129,7 @@ namespace UnitTest3
 		{
 			sqlite sq;
 			sq.setup_create("plop.db");
-
+			sq.exec_simple("CREATE TABLE examp(id int PRIMARY KEY, positions text, directions text);");
 			sq.exec_simple("SELECT * FROM examp;");
 			Assert::AreEqual("not an error", sq.get_err_msg(), 0.01, L"sqlite_simple failed", LINE_INFO());
 		}
