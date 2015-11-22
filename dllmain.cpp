@@ -76,9 +76,15 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function)
 		LOG(ERROR) << "INPUT not recognized " << debug;
 		out = "INPUT not recognized";
 	}	
+
+	// Size check
+	if (out.size() >= outputSize) {
+		out = "RESULT too big : > outputSize";
+	}
 	
 	// Send back the result
-	strncpy_s(output, outputSize, out.c_str(), _TRUNCATE);
+	//strncpy_s(output, outputSize, out.c_str(), _TRUNCATE);
+	strncpy(output, out.c_str(), outputSize);
 }
 
 

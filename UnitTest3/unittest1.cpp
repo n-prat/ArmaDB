@@ -1,5 +1,8 @@
 #include "stdafx.h"
 
+// as per https://community.bistudio.com/wiki/Extensions
+#define OUTPUTSIZE 4096
+
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTest3
@@ -12,8 +15,7 @@ namespace UnitTest3
 		TEST_METHOD(helloworld)
 		{			
 			char out[50], fun[50] = "";
-			int outSize = 50;
-			RVExtension(out, outSize, fun);			
+			RVExtension(out, OUTPUTSIZE, fun);
 			Assert::AreEqual(
 				// Expected value:
 				"Hello World!!",
@@ -28,35 +30,39 @@ namespace UnitTest3
 				LINE_INFO());
 		}
 
+		TEST_METHOD(output_size_too_big)
+		{
+			char out[50], fun[] = "sdf:aze:hg:xcv:jgh:oiu:qsd:xcv:ytuiy:sdfsfdg";
+			RVExtension(out, 10, fun);
+			// "RESULT too big : > outputSize"
+			Assert::AreEqual("RESULT too", out, 0.01, L"output_size_too_big failed", LINE_INFO());
+		}
+
 		TEST_METHOD(too_many_args)
 		{
 			char out[50], fun[] = "sdf:aze:hg:xcv:jgh:oiu:qsd:xcv:ytuiy:sdfsfdg";
-			int outSize = 50;
-			RVExtension(out, outSize, fun);
+			RVExtension(out, OUTPUTSIZE, fun);
 			Assert::AreEqual("INPUT not recognized", out, 0.01, L"too_many_args failed", LINE_INFO());
 		}
 
 		TEST_METHOD(two_args_not_valid)
 		{
 			char out[100], fun[] = "sdf:aze";
-			int outSize = 100;
-			RVExtension(out, outSize, fun);
+			RVExtension(out, OUTPUTSIZE, fun);
 			Assert::AreEqual("SETUP command invalid: USAGE: OPEN:filename or OPENCREATE:filename", out, 0.01, L"two_args_not_valid failed", LINE_INFO());
 		}
 
 		TEST_METHOD(two_args_valid1)
 		{
 			char out[100], fun[] = "OPEN:filename";
-			int outSize = 100;
-			RVExtension(out, outSize, fun);
+			RVExtension(out, OUTPUTSIZE, fun);
 			Assert::AreEqual("OPEN ok", out, 0.01, L"two_args_valid1 failed", LINE_INFO());
 		}
 
 		TEST_METHOD(two_args_valid2)
 		{
 			char out[100], fun[] = "OPENCREATE:filename";
-			int outSize = 100;
-			RVExtension(out, outSize, fun);
+			RVExtension(out, OUTPUTSIZE, fun);
 			Assert::AreEqual("OPENCREATE ok", out, 0.01, L"two_args_valid2 failed", LINE_INFO());
 		}
 
