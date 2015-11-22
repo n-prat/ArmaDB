@@ -49,7 +49,7 @@ namespace UnitTest3
 			char out[100], fun[] = "OPEN:filename";
 			int outSize = 100;
 			RVExtension(out, outSize, fun);
-			Assert::AreEqual("", out, 0.01, L"two_args_valid1 failed", LINE_INFO());
+			Assert::AreEqual("OPEN ok", out, 0.01, L"two_args_valid1 failed", LINE_INFO());
 		}
 
 		TEST_METHOD(two_args_valid2)
@@ -57,7 +57,7 @@ namespace UnitTest3
 			char out[100], fun[] = "OPENCREATE:filename";
 			int outSize = 100;
 			RVExtension(out, outSize, fun);
-			Assert::AreEqual("", out, 0.01, L"two_args_valid2 failed", LINE_INFO());
+			Assert::AreEqual("OPENCREATE ok", out, 0.01, L"two_args_valid2 failed", LINE_INFO());
 		}
 
 		TEST_METHOD(split_to_container_1)

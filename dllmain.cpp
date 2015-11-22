@@ -20,7 +20,8 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 	return TRUE;
 }
 
-void __stdcall RVExtension(char *output, int outputSize, const char *function)
+//void __stdcall RVExtension(char *output, int outputSize, const char *function)
+void __stdcall RVExtension_Dev(char *output, int outputSize, const char *function)
 {
 	sqlite sq;
 	std::string out("");
@@ -48,12 +49,18 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function)
 				std::string msg(sq.get_err_msg());
 				out = "SETUP error: " + msg;
 			}
+			else {
+				out = "OPEN ok";
+			}
 		}
 		else if (args[0].compare("OPENCREATE") == 0) {
 			if (sq.setup_create(args[1])) {
 				std::string msg(sq.get_err_msg());
 				out = "SETUP error: " + msg;
-			}			
+			}
+			else {
+				out = "OPENCREATE ok";
+			}
 		}
 		else {			
 			out = "SETUP command invalid: USAGE: OPEN:filename or OPENCREATE:filename";
@@ -73,3 +80,8 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function)
 	strncpy_s(output, outputSize, out.c_str(), _TRUNCATE);
 }
 
+
+// TODO
+// * check output dir for sqlite : default = Arma's root
+// * CREATE is returning "ok" on non-existing file
+// * (cmake) build armadb_static with RVExtension and armadb with RVExtension_Dev

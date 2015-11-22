@@ -7,7 +7,7 @@
 // test ingame : hint ("Arma_db" callExtension "");
 extern "C"
 {
-	__declspec (dllexport) void __stdcall RVExtension(char *output, int outputSize, const char *function);
+	__declspec (dllexport) void __stdcall RVExtension_Dev(char *output, int outputSize, const char *function);
 }
 
 // Split string into a container
