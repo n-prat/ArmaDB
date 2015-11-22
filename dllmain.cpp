@@ -2,6 +2,7 @@
 
 #include "dllmain.h"
 
+
 INITIALIZE_EASYLOGGINGPP
 
 BOOL APIENTRY DllMain( HMODULE hModule,
@@ -21,7 +22,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 }
 
 //void __stdcall RVExtension(char *output, int outputSize, const char *function)
-void __stdcall RVExtension_Dev(char *output, int outputSize, const char *function)
+void __stdcall RVExtension(char *output, int outputSize, const char *function)
 {
 	sqlite sq;
 	std::string out("");
