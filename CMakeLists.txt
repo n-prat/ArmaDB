@@ -21,12 +21,6 @@ include_directories("${PROJECT_SOURCE_DIR}/sqlite3")
 source_group("Headers Files" FILES ${HDRS_BASE})
 
 
-## CONFIGURE dllmain.h.in and dllmain.cpp.in
-SET( RVE_EXT "RVExtension" )
-SET( DLLMAIN "dllmain.h" )
-configure_file(${CMAKE_SOURCE_DIR}/dllmain.h.in ${CMAKE_SOURCE_DIR}/dllmain.h)
-configure_file(${CMAKE_SOURCE_DIR}/dllmain.cpp.in ${CMAKE_SOURCE_DIR}/dllmain.cpp)
-
 ## Set the list of sources
 SET( BASE_SOURCES	
 	${PROJECT_SOURCE_DIR}/sqlite.cpp
@@ -46,21 +40,17 @@ add_library(armadb SHARED ${PROJECT_SOURCE_DIR}/dllmain.cpp ${BASE_SOURCES} ${PR
 
 # UnitTest needs a STATIC lib
 # Because the DLL as only one exported function
-IF(WITH_TESTLIB AND WIN32)
-	add_library(armadb_static STATIC ${PROJECT_SOURCE_DIR}/dllmain.cpp ${BASE_SOURCES} ${PROJECT_SOURCE_DIR}/dllmain.h ${BASE_HEADERS}) 
-	
+add_library(armadb_static STATIC ${PROJECT_SOURCE_DIR}/dllmain.cpp ${BASE_SOURCES} ${PROJECT_SOURCE_DIR}/dllmain.h ${BASE_HEADERS}) 
+IF(WITH_TESTLIB AND WIN32)	
 	# external project created from VS ( windows-only )
 	include_external_msproject(UnitTest3 ${PROJECT_SOURCE_DIR}/UnitTest3/UnitTest3.vcxproj)
 ENDIF(WITH_TESTLIB AND WIN32)
 
 
 ## OPTION build SHARED dll with entry point renamed to RVExtension_Dev
-IF(WITH_A3DLLPROXY)
-	SET( RVE_EXT "RVExtension_Dev" )
-	SET( DLLMAIN "dllmain-dev.h" )
-	configure_file(${PROJECT_SOURCE_DIR}/dllmain.h.in ${PROJECT_SOURCE_DIR}/dllmain-dev.h)
-	configure_file(${CMAKE_SOURCE_DIR}/dllmain.cpp.in ${PROJECT_SOURCE_DIR}/dllmain-dev.cpp)
-	add_library(armadb_dev SHARED ${PROJECT_SOURCE_DIR}/dllmain-dev.cpp ${BASE_SOURCES} ${PROJECT_SOURCE_DIR}/dllmain-dev.h ${BASE_HEADERS})
+IF(WITH_A3DLLPROXY)	
+	add_library(armadb_dev SHARED ${PROJECT_SOURCE_DIR}/dllmain-dev.cpp ${PROJECT_SOURCE_DIR}/dllmain-dev.h )
+	target_link_libraries(armadb_dev debug ${PROJECT_BINARY_DIR}/Debug/armadb_static.lib optimized ${PROJECT_BINARY_DIR}/Release/armadb_static.lib)
 	#add_library(armadb_dev SHARED ${PROJECT_SOURCE_DIR}/dllmain-dev.cpp ${PROJECT_SOURCE_DIR}/dllmain-dev.h ${HDRS_BASE})
 ENDIF(WITH_A3DLLPROXY)	
 

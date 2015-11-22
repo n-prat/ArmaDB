@@ -1,6 +1,6 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 
-#include "@DLLMAIN@"
+#include "dllmain.h"
 
 
 INITIALIZE_EASYLOGGINGPP
@@ -22,7 +22,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 }
 
 //void __stdcall RVExtension(char *output, int outputSize, const char *function)
-void __stdcall @RVE_EXT@(char *output, int outputSize, const char *function)
+void __stdcall RVExtension(char *output, int outputSize, const char *function)
 {
 	sqlite sq;
 	std::string out("");
