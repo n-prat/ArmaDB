@@ -14,7 +14,7 @@ namespace UnitTest3
 		// If "function" arg is empty, should reply "Hello World!!"
 		TEST_METHOD(helloworld)
 		{			
-			char out[50], fun[50] = "";
+			char out[OUTPUTSIZE], *fun = "";
 			RVExtension(out, OUTPUTSIZE, fun);
 			Assert::AreEqual(
 				// Expected value:
@@ -32,36 +32,36 @@ namespace UnitTest3
 
 		TEST_METHOD(output_size_too_big)
 		{
-			char out[50], fun[] = "sdf:aze:hg:xcv:jgh:oiu:qsd:xcv:ytuiy:sdfsfdg";
-			RVExtension(out, 10, fun);
+			char out[OUTPUTSIZE], fun[] = "sdf:aze:hg:xcv:jgh:oiu:qsd:xcv:ytuiy:sdfsfdg";
+			RVExtension(out, 11, fun);
 			// "RESULT too big : > outputSize"
 			Assert::AreEqual("RESULT too", out, 0.01, L"output_size_too_big failed", LINE_INFO());
 		}
 
 		TEST_METHOD(too_many_args)
 		{
-			char out[50], fun[] = "sdf:aze:hg:xcv:jgh:oiu:qsd:xcv:ytuiy:sdfsfdg";
+			char out[OUTPUTSIZE], fun[] = "sdf:aze:hg:xcv:jgh:oiu:qsd:xcv:ytuiy:sdfsfdg";
 			RVExtension(out, OUTPUTSIZE, fun);
 			Assert::AreEqual("INPUT not recognized", out, 0.01, L"too_many_args failed", LINE_INFO());
 		}
 
 		TEST_METHOD(two_args_not_valid)
 		{
-			char out[100], fun[] = "sdf:aze";
+			char out[OUTPUTSIZE], fun[] = "sdf:aze";
 			RVExtension(out, OUTPUTSIZE, fun);
 			Assert::AreEqual("SETUP command invalid: USAGE: OPEN:filename or OPENCREATE:filename", out, 0.01, L"two_args_not_valid failed", LINE_INFO());
 		}
 
 		TEST_METHOD(two_args_valid1)
 		{
-			char out[100], fun[] = "OPEN:filename";
+			char out[OUTPUTSIZE], fun[] = "OPEN:filename";
 			RVExtension(out, OUTPUTSIZE, fun);
 			Assert::AreEqual("OPEN ok", out, 0.01, L"two_args_valid1 failed", LINE_INFO());
 		}
 
 		TEST_METHOD(two_args_valid2)
 		{
-			char out[100], fun[] = "OPENCREATE:filename";
+			char out[OUTPUTSIZE], fun[] = "OPENCREATE:filename";
 			RVExtension(out, OUTPUTSIZE, fun);
 			Assert::AreEqual("OPENCREATE ok", out, 0.01, L"two_args_valid2 failed", LINE_INFO());
 		}

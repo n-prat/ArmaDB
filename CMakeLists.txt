@@ -4,6 +4,12 @@ project (Arma_db)
 include (GenerateExportHeader)
 #set(CMAKE_CONFIGURATION_TYPES "Release")
 
+set(Boost_USE_STATIC_LIBS ON)
+find_package( Boost 1.59.0 REQUIRED COMPONENTS program_options)
+
+message("Boost_PROGRAM_OPTIONS :\n   ${Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG} \n   ${Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE}" )
+message("Boost include dir :\n   ${Boost_INCLUDE_DIR}" )
+
 IF(WIN32)
     add_definitions(-DWIN32)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
@@ -17,7 +23,8 @@ OPTION( WITH_TESTLIB "Build STATIC lib for use by UnitTest" OFF )
 
 include_directories("${PROJECT_SOURCE_DIR}")
 include_directories("${PROJECT_SOURCE_DIR}/sqlite3")
-#file(GLOB HDRS_BASE "*.h")
+include_directories("${Boost_INCLUDE_DIR}")
+
 source_group("Headers Files" FILES ${HDRS_BASE})
 
 
@@ -37,6 +44,8 @@ SET( BASE_HEADERS
 ## BUILD main SHARED dll
 # Headers are need here to appear in VS solution
 add_library(armadb SHARED ${PROJECT_SOURCE_DIR}/dllmain.cpp ${BASE_SOURCES} ${PROJECT_SOURCE_DIR}/dllmain.h ${BASE_HEADERS})
+# Link with Boost's program_options (not an header-only lib)
+target_link_libraries(armadb debug ${Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG} optimized ${Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE} )	
 
 # UnitTest needs a STATIC lib
 # Because the DLL as only one exported function
@@ -50,7 +59,7 @@ ENDIF(WITH_TESTLIB AND WIN32)
 ## OPTION build SHARED dll with entry point renamed to RVExtension_Dev
 IF(WITH_A3DLLPROXY)	
 	add_library(armadb_dev SHARED ${PROJECT_SOURCE_DIR}/dllmain-dev.cpp ${PROJECT_SOURCE_DIR}/dllmain-dev.h )
-	target_link_libraries(armadb_dev debug ${PROJECT_BINARY_DIR}/Debug/armadb_static.lib optimized ${PROJECT_BINARY_DIR}/Release/armadb_static.lib)
-	#add_library(armadb_dev SHARED ${PROJECT_SOURCE_DIR}/dllmain-dev.cpp ${PROJECT_SOURCE_DIR}/dllmain-dev.h ${HDRS_BASE})
+	target_link_libraries(armadb_dev debug ${PROJECT_BINARY_DIR}/Debug/armadb_static.lib optimized ${PROJECT_BINARY_DIR}/Release/armadb_static.lib)	
+	target_link_libraries(armadb_dev debug ${Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG} optimized ${Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE} )
 ENDIF(WITH_A3DLLPROXY)	
 
