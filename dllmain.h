@@ -3,7 +3,6 @@
 
 #include "stdafx.h"
 
-
 // test ingame : hint ("Arma_db" callExtension "");
 extern "C"
 {
