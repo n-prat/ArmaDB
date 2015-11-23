@@ -5,6 +5,8 @@ include (GenerateExportHeader)
 #set(CMAKE_CONFIGURATION_TYPES "Release")
 
 set(Boost_USE_STATIC_LIBS ON)
+set(BOOST_LIBRARYDIR "W:/Programmes/boost/lib")
+find_package( Boost 1.59.0 )
 find_package( Boost 1.59.0 REQUIRED COMPONENTS program_options)
 
 message("Boost_PROGRAM_OPTIONS :\n   ${Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG} \n   ${Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE}" )
@@ -19,7 +21,7 @@ ELSE(WIN32)
 ENDIF(WIN32)
 
 OPTION( WITH_A3DLLPROXY "Rename RVExtension to RVExtension_Dev" OFF )
-OPTION( WITH_TESTLIB "Build STATIC lib for use by UnitTest" OFF )
+OPTION( WITH_TESTS "Build Tests(only on windows)" OFF )
 
 include_directories("${PROJECT_SOURCE_DIR}")
 include_directories("${PROJECT_SOURCE_DIR}/sqlite3")
@@ -50,10 +52,17 @@ target_link_libraries(armadb debug ${Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG} optimi
 # UnitTest needs a STATIC lib
 # Because the DLL as only one exported function
 add_library(armadb_static STATIC ${PROJECT_SOURCE_DIR}/dllmain.cpp ${BASE_SOURCES} ${PROJECT_SOURCE_DIR}/dllmain.h ${BASE_HEADERS}) 
-IF(WITH_TESTLIB AND WIN32)	
+IF(WITH_TESTS AND MSVC)	
 	# external project created from VS ( windows-only )
-	include_external_msproject(UnitTest3 ${PROJECT_SOURCE_DIR}/UnitTest3/UnitTest3.vcxproj)
-ENDIF(WITH_TESTLIB AND WIN32)
+	#include_external_msproject(UnitTest3 ${PROJECT_SOURCE_DIR}/UnitTest3/UnitTest3.vcxproj)
+	#C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\UnitTest\include
+	#C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\UnitTest\lib
+	include_directories("C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/UnitTest/include")
+	add_library(Tests SHARED ${PROJECT_SOURCE_DIR}/UnitTest3/unittest1.cpp ${PROJECT_SOURCE_DIR}/UnitTest3/stdafx.cpp ${PROJECT_SOURCE_DIR}/UnitTest3/stdafx.h ${PROJECT_SOURCE_DIR}/UnitTest3/targetver.h)
+	target_link_libraries(Tests "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/UnitTest/lib/Microsoft.VisualStudio.TestTools.CppUnitTestFramework.lib")
+	target_link_libraries(Tests debug ${Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG} optimized ${Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE} )
+	target_link_libraries(Tests debug ${PROJECT_BINARY_DIR}/Debug/armadb_static.lib optimized ${PROJECT_BINARY_DIR}/Release/armadb_static.lib)	
+ENDIF(WITH_TESTS AND MSVC)
 
 
 ## OPTION build SHARED dll with entry point renamed to RVExtension_Dev
