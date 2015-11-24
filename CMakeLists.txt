@@ -4,6 +4,48 @@ project (Arma_db)
 include (GenerateExportHeader)
 #set(CMAKE_CONFIGURATION_TYPES "Release")
 
+
+# Use @LIC_C@ in a file to add the C-formatted Licence Header
+# Find the list of cpp/c/h files in the source dir and call configure_file on them
+# (not faster than copy-pasting manually but who cares)
+SET( LICENCE "	
+	ArmaDB - Arma Extension which allows to connect to SQLite
+    Copyright (C) 2015  Nathan Prat
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, version 3 of the License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+")
+SET(LIC_C "/*\n${LICENCE}\n*/")
+
+# Get the list of files to configure
+# Also, Do NOT use that list list for compiling/linking
+# cf warning in CMake docs
+# [GLOB_RECURSE goes in build/ so we do it manually]
+file(GLOB MY_SOURCES 
+		"${PROJECT_SOURCE_DIR}/*.cpp" 
+		"${PROJECT_SOURCE_DIR}/*.c"
+		"${PROJECT_SOURCE_DIR}/*.h"
+		"UnitTest3/*.cpp"
+		"UnitTest3/*.c"
+		"UnitTest3/*.h"
+	)
+	
+# Configure them
+foreach(loop_var ${MY_SOURCES})
+	message("Configuring ${loop_var}")
+	configure_file(${loop_var} ${loop_var} @ONLY )
+endforeach(loop_var)
+
+
 set(Boost_USE_STATIC_LIBS ON)
 set(BOOST_LIBRARYDIR "W:/Programmes/boost/lib")
 find_package( Boost 1.59.0 )
