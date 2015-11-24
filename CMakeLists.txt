@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.4)
 
 project (Arma_db)
 include (GenerateExportHeader)
-#set(CMAKE_CONFIGURATION_TYPES "Release")
+set(CMAKE_CONFIGURATION_TYPES "Release;Debug")
 
 
 # Use @LIC_C@ in a file to add the C-formatted Licence Header
