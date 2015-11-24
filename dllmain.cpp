@@ -18,6 +18,7 @@
 */
 
 // dllmain.cpp : Defines the entry point for the DLL application.
+#include "stdafx.h"
 
 #include "dllmain.h"
 
@@ -109,5 +110,3 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function)
 
 // TODO
 // * check output dir for sqlite : default = Arma's root
-// * CREATE is returning "ok" on non-existing file
-// * (cmake) build armadb_static with RVExtension and armadb with RVExtension_Dev

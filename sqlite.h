@@ -19,7 +19,8 @@
 
 #pragma once
 
-#include <string>
+//#include <string>
+
 #include "sqlite3\sqlite3.h"
 
 class sqlite

@@ -17,10 +17,10 @@
 
 */
 
-// dllmain.h : Defines the entry point for the DLL application.
 #pragma once
 
-#include "stdafx.h"
+#include "sqlite.h"
+#include "easylogging++.h"
 
 // test ingame : hint ("Arma_db" callExtension "");
 extern "C"

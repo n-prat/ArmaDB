@@ -37,8 +37,4 @@
 #include <vector>
 #include <cstddef>
 
-#include "easylogging++.h"
 #include <boost/program_options.hpp>
-//#include "./sqlite3/sqlite3.h"
-#include "sqlite.h"
-//#include "dllmain.h"

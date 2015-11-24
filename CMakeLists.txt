@@ -1,4 +1,6 @@
 cmake_minimum_required (VERSION 3.4)
+set (CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
+include(cotire)
 
 project (Arma_db)
 include (GenerateExportHeader)
@@ -57,6 +59,8 @@ message("Boost include dir :\n   ${Boost_INCLUDE_DIR}" )
 IF(WIN32)
     add_definitions(-DWIN32)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
+	#add_definitions(/Yc"stdafx.h") #precompiled headers
+	#set_source_files_properties(${PROJECT_SOURCE_DIR}/sqlite3/sqlite3.c PROPERTIES COMPILE_FLAGS /Y-)
 ELSE(WIN32)
 	add_definitions(-DUNIX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g")
@@ -64,6 +68,7 @@ ENDIF(WIN32)
 
 OPTION( WITH_A3DLLPROXY "Rename RVExtension to RVExtension_Dev" OFF )
 OPTION( WITH_TESTS "Build Tests(only on windows)" OFF )
+
 
 include_directories("${PROJECT_SOURCE_DIR}")
 include_directories("${PROJECT_SOURCE_DIR}/sqlite3")
@@ -82,7 +87,7 @@ SET( BASE_HEADERS
 	${PROJECT_SOURCE_DIR}/sqlite.h
 	${PROJECT_SOURCE_DIR}/stdafx.h
 	${PROJECT_SOURCE_DIR}/targetver.h
-	${PROJECT_SOURCE_DIR}/sqlite3/sqlite3.c
+	${PROJECT_SOURCE_DIR}/sqlite3/sqlite3.h
 )
 
 ## BUILD main SHARED dll
@@ -90,12 +95,12 @@ SET( BASE_HEADERS
 add_library(armadb SHARED ${PROJECT_SOURCE_DIR}/dllmain.cpp ${BASE_SOURCES} ${PROJECT_SOURCE_DIR}/dllmain.h ${BASE_HEADERS})
 # Link with Boost's program_options (not an header-only lib)
 target_link_libraries(armadb debug ${Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG} optimized ${Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE} )	
+cotire(armadb)
 
 # UnitTest needs a STATIC lib
 # Because the DLL as only one exported function
 add_library(armadb_static STATIC ${PROJECT_SOURCE_DIR}/dllmain.cpp ${BASE_SOURCES} ${PROJECT_SOURCE_DIR}/dllmain.h ${BASE_HEADERS}) 
-IF(WITH_TESTS AND MSVC)	
-	# external project created from VS ( windows-only )
+IF(WITH_TESTS AND MSVC)		
 	#include_external_msproject(UnitTest3 ${PROJECT_SOURCE_DIR}/UnitTest3/UnitTest3.vcxproj)
 	#C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\UnitTest\include
 	#C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\UnitTest\lib
