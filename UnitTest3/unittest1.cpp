@@ -212,13 +212,52 @@ namespace UnitTest3
 	TEST_CLASS(ConfigFile)
 	{
 	public:
-		TEST_METHOD(read_config_sql_path)
+		TEST_METHOD(read_config_Value1)
 		{
 			ConfigParser cfg;
 			cfg.read_config("config.ini");
+			std::string str = cfg.get_pt().get<std::string>("Section1.Value1");
 			
-			Assert::AreEqual("plop", cfg.get_sql_custom().c_str(), 0.01, L"read_config_sql_path failed", LINE_INFO());
+			Assert::AreEqual("plop", str.c_str(), 0.01, L"read_config_Value1 failed", LINE_INFO());
 		}
 
+		TEST_METHOD(read_config_Value2_with_whitespaces)
+		{
+			ConfigParser cfg;
+			cfg.read_config("config.ini");
+			std::string str = cfg.get_pt().get<std::string>("Section1.Value2");
+
+			Assert::AreEqual("that is a multitoken value", str.c_str(), 0.01, L"read_config_Value2_with_whitespaces failed", LINE_INFO());
+		}
+
+		TEST_METHOD(read_config_Value3)
+		{
+			ConfigParser cfg;
+			cfg.read_config("config.ini");
+			std::string str = cfg.get_pt().get<std::string>("Section1.Value3");
+
+			Assert::AreEqual("that contains a;", str.c_str(), 0.01, L"read_config_Value3 failed", LINE_INFO());
+		}
+
+		// TODO multiline parsing
+		/*
+		TEST_METHOD(read_config_Value4)
+		{
+			ConfigParser cfg;
+			cfg.read_config("config.ini");
+			std::string str = cfg.get_pt().get<std::string>("Section1.Value4");
+
+			Assert::AreEqual("that contains a;", str.c_str(), 0.01, L"read_config_Value4 failed", LINE_INFO());
+		}*/
+
+		TEST_METHOD(config_check)
+		{
+			ConfigParser cfg;
+			cfg.read_config("config.ini");
+			cfg.check_config();
+			std::string str = cfg.get_err_msg();
+
+			Assert::AreEqual("Config file OK", str.c_str(), 0.01, L"read_config_Value3 failed", LINE_INFO());
+		}
 	};
 }

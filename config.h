@@ -23,6 +23,7 @@
 #include <string>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
+#include <boost/format.hpp>
 
 class ConfigParser
 {
@@ -30,8 +31,17 @@ public:
 	ConfigParser();
 	~ConfigParser();
 
+
 	int read_config(std::string filename);
-	std::string get_sql_custom() { return sql_custom_path; }
-private:
-	std::string  sql_custom_path;
+	int check_config();
+
+	std::string get_err_msg() { return err_msg; }
+	
+	// TODO remove (used Tests only)
+	boost::property_tree::ptree & get_pt() { return pt; }
+private:	
+	boost::property_tree::ptree pt;
+	bool sql_custom_only;
+	bool use_sql_custom;
+	std::string err_msg;
 };
