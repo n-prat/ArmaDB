@@ -26,8 +26,9 @@
 sqlite::sqlite()
 {
 	db = NULL;
-	char *zErrMsg = "error";
-	int rc = -1;
+	zErrMsg = "error";
+	rc = -1;
+	sql_custom_only = true;
 }
 
 

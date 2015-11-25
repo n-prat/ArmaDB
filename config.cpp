@@ -1,3 +1,4 @@
+#include "config.h"
 /*
 	
 	ArmaDB - Arma Extension which allows to connect to SQLite
@@ -17,27 +18,32 @@
 
 */
 
-// stdafx.h : include file for standard system include files,
-// or project specific include files that are used frequently, but
-// are changed infrequently
-//
+ConfigParser::ConfigParser()
+{
+}
 
-#pragma once
+ConfigParser::~ConfigParser()
+{
+}
 
-#include "targetver.h"
+int ConfigParser::read_config(std::string filename)
+{
+	int ret = -1;
+	boost::property_tree::ptree pt;
 
-#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
-// Windows Header Files:
-#include <windows.h>
+	try
+	{
+		boost::property_tree::ini_parser::read_ini("config.ini", pt);
+		sql_custom_path = pt.get<std::string>("Section1.Value1");
 
+		ret = 0;
+	}
+	catch (const std::exception e)
+	{
+		std::cout << e.what() << std::endl;
+		ret = 1;
+	}
+		
 
-
-// TODO: reference additional headers your program requires here
-#include <string>
-#include <vector>
-#include <cstddef>
-
-//#include <boost/program_options.hpp>
-//#include <boost/program_options/parsers.hpp>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/ini_parser.hpp>
+	return ret;
+}

@@ -19,8 +19,10 @@
 
 #pragma once
 
+#include "config.h"
 #include "sqlite.h"
 #include "easylogging++.h"
+//#include <boost/program_options/parsers.hpp>
 
 // test ingame : hint ("Arma_db" callExtension "");
 extern "C"
@@ -59,3 +61,5 @@ Container& split_to_container(
 	} while (next != Container::value_type::npos);
 	return result;
 }
+
+

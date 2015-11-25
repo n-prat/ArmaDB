@@ -74,7 +74,7 @@ include_directories("${PROJECT_SOURCE_DIR}")
 include_directories("${PROJECT_SOURCE_DIR}/sqlite3")
 include_directories("${Boost_INCLUDE_DIR}")
 
-source_group("Headers Files" FILES ${HDRS_BASE})
+#source_group("Headers Files" FILES ${HDRS_BASE})
 
 
 ## Set the list of sources
@@ -82,24 +82,36 @@ SET( BASE_SOURCES
 	${PROJECT_SOURCE_DIR}/sqlite.cpp
 	${PROJECT_SOURCE_DIR}/stdafx.cpp
 	${PROJECT_SOURCE_DIR}/sqlite3/sqlite3.c
+	${PROJECT_SOURCE_DIR}/config.cpp
 )
 SET( BASE_HEADERS	
 	${PROJECT_SOURCE_DIR}/sqlite.h
 	${PROJECT_SOURCE_DIR}/stdafx.h
 	${PROJECT_SOURCE_DIR}/targetver.h
 	${PROJECT_SOURCE_DIR}/sqlite3/sqlite3.h
+	${PROJECT_SOURCE_DIR}/config.h
 )
+SET( SRCS_PLUS_MAIN "${PROJECT_SOURCE_DIR}/dllmain.cpp;${BASE_SOURCES}")
+SET( HDRS_PLUS_MAIN "${PROJECT_SOURCE_DIR}/dllmain.h;${BASE_HEADERS}")
+SET( SRCS_PLUS_DEV "${PROJECT_SOURCE_DIR}/dllmain-dev.cpp;${BASE_SOURCES}")
+SET( HDRS_PLUS_DEV "${PROJECT_SOURCE_DIR}/dllmain-dev.h;${BASE_HEADERS}")
 
 ## BUILD main SHARED dll
-# Headers are need here to appear in VS solution
-add_library(armadb SHARED ${PROJECT_SOURCE_DIR}/dllmain.cpp ${BASE_SOURCES} ${PROJECT_SOURCE_DIR}/dllmain.h ${BASE_HEADERS})
+# Headers are needed here to appear in VS solution
+message("sources for armadb:\n ${SRCS_PLUS_MAIN}")
+message("headers for armadb:\n ${HDRS_PLUS_MAIN}")
+#add_library(armadb SHARED ${SRCS_PLUS_MAIN} ${HDRS_PLUS_MAIN} )
+add_library(armadb SHARED ${SRCS_PLUS_MAIN} ${HDRS_PLUS_MAIN}) 
 # Link with Boost's program_options (not an header-only lib)
-target_link_libraries(armadb debug ${Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG} optimized ${Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE} )	
-cotire(armadb)
+#target_link_libraries(armadb debug ${Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG} optimized ${Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE} )	
+#cotire(armadb)
 
 # UnitTest needs a STATIC lib
 # Because the DLL as only one exported function
-add_library(armadb_static STATIC ${PROJECT_SOURCE_DIR}/dllmain.cpp ${BASE_SOURCES} ${PROJECT_SOURCE_DIR}/dllmain.h ${BASE_HEADERS}) 
+IF(WITH_TESTS OR WITH_A3DLLPROXY)	
+	add_library(armadb_static STATIC ${SRCS_PLUS_MAIN} ${HDRS_PLUS_MAIN}) 
+ENDIF(WITH_TESTS OR WITH_A3DLLPROXY)
+
 IF(WITH_TESTS AND MSVC)		
 	#include_external_msproject(UnitTest3 ${PROJECT_SOURCE_DIR}/UnitTest3/UnitTest3.vcxproj)
 	#C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\UnitTest\include
@@ -116,6 +128,6 @@ ENDIF(WITH_TESTS AND MSVC)
 IF(WITH_A3DLLPROXY)	
 	add_library(armadb_dev SHARED ${PROJECT_SOURCE_DIR}/dllmain-dev.cpp ${PROJECT_SOURCE_DIR}/dllmain-dev.h )
 	target_link_libraries(armadb_dev debug ${PROJECT_BINARY_DIR}/Debug/armadb_static.lib optimized ${PROJECT_BINARY_DIR}/Release/armadb_static.lib)	
-	target_link_libraries(armadb_dev debug ${Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG} optimized ${Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE} )
+	#target_link_libraries(armadb_dev debug ${Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG} optimized ${Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE} )
 ENDIF(WITH_A3DLLPROXY)	
 

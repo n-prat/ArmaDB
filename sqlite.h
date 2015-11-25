@@ -19,8 +19,7 @@
 
 #pragma once
 
-//#include <string>
-
+#include <string>
 #include "sqlite3\sqlite3.h"
 
 class sqlite
@@ -39,6 +38,7 @@ public:
 
 	int get_rc() { return rc; }
 private:
+	bool sql_custom_only;
 	sqlite3 *db;
 	char *zErrMsg;
 	int rc;

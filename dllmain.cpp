@@ -20,6 +20,8 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "stdafx.h"
 
+
+#include "config.h"
 #include "dllmain.h"
 
 
@@ -46,6 +48,8 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function)
 {
 	sqlite sq;
 	std::string out("");
+
+	ConfigParser cfg;
 
 	// Split function on delimiter ":"
 	std::string str_args(function);

@@ -18,6 +18,10 @@
 */
 
 #include "stdafx.h"
+#include "../sqlite.h"
+#include "../config.h"
+#include "../dllmain.h"
+
 
 // as per https://community.bistudio.com/wiki/Extensions
 #define OUTPUTSIZE 4096
@@ -203,5 +207,18 @@ namespace UnitTest3
 			Assert::AreEqual("not an error", sq.get_err_msg(), 0.01, L"sqlite_close_exists failed", LINE_INFO());
 		}
 		
+	};
+
+	TEST_CLASS(ConfigFile)
+	{
+	public:
+		TEST_METHOD(read_config_sql_path)
+		{
+			ConfigParser cfg;
+			cfg.read_config("config.ini");
+			
+			Assert::AreEqual("plop", cfg.get_sql_custom().c_str(), 0.01, L"read_config_sql_path failed", LINE_INFO());
+		}
+
 	};
 }
