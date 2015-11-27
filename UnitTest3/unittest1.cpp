@@ -34,21 +34,25 @@ namespace UnitTest3
 	{
 	public:
 		
-		// If "function" arg is empty, should reply "Hello World!!"
-		TEST_METHOD(helloworld)
+		// If "function" arg is empty, should reply "[armadb] version VERSION"
+		TEST_METHOD(version)
 		{			
 			char out[OUTPUTSIZE], *fun = "";
+
+			std::string expected = "[armadb] version ";
+			std::string version_string = boost::str(boost::format(" %1%.%2%.%3%") % MAJOR % MINOR % REVISION);
+			expected.append(version_string);
+
 			RVExtension(out, OUTPUTSIZE, fun);
 			Assert::AreEqual(
 				// Expected value:
-				"Hello World!!",
+				expected.c_str(),
 				// Actual value:
 				out,
-				//"Hello World!!",
 				// Tolerance:
 				0.01,
 				// Message:
-				L"Hello World failed",
+				L"version check failed",
 				// Line number - used if there is no PDB file:
 				LINE_INFO());
 		}

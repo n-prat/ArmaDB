@@ -61,10 +61,12 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function)
 
 	// Parse argument
 	if (nb_args == 0) {
-		// Hello World if empty
-		LOG(DEBUG) << "Hello World!!";
+		// Version number if no argument
+		LOG(DEBUG) << "[armadb] empty args";
 		//strncpy_s(output, outputSize, "Hello World!!", _TRUNCATE);
-		out = "Hello World!!";
+		out = "[armadb] version ";		
+		std::string version_string = boost::str(boost::format(" %1%.%2%.%3%") % MAJOR % MINOR % REVISION);
+		out.append(version_string);
 	}
 	else if (nb_args == 2) {
 		//		input : "SETUP:dbname"
