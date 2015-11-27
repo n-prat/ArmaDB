@@ -49,7 +49,7 @@ int ConfigParser::read_config(std::string filename)
 	return ret;
 }
 
-int ConfigParser::check_config()
+int ConfigParser::load_config()
 {
 	int ret = 0;
 	int sql_custom_queries = 0;
@@ -76,25 +76,34 @@ int ConfigParser::check_config()
 		sql_custom_queries = pt.get<int>("Options.sql_custom_queries", 0);
 
 		if (sql_custom_queries > 0) {
-			std::string section_i, name_i, type_i, res_name, res_type;
+			std::string section_i, name_i, type_i, sql_raw_i, nb_bind_i, res_name, res_type, res_sql_raw, res_nb_bind;
 			boost::format sql_i("SQL_%1%");
 
 			// range is SQL_1, SQL_2...
-			//TODO iterate directly on the nodes
+			// TODO iterate directly on the nodes
 			for (int i = 1; i <= sql_custom_queries; i++) {
 				// update the format
 				sql_i % i;
 				name_i = sql_i.str();
 				type_i = sql_i.str();
+				sql_raw_i = sql_i.str();
+				nb_bind_i = sql_i.str();
 
 				// 2 possible types : basic and bind($NNN, @AAAA, etc)
 				name_i = name_i.append(".name");
 				type_i = type_i.append(".type");
+				sql_raw_i = sql_raw_i.append(".sql");
+				nb_bind_i = nb_bind_i.append(".parameters");
 
 				try
 				{
 					res_name = pt.get<std::string>(name_i);
 					res_type = pt.get<std::string>(type_i);
+					res_sql_raw = pt.get<std::string>(sql_raw_i);
+
+					if (res_type.compare("bind") == 0) {
+						res_nb_bind = pt.get<std::string>(nb_bind_i);
+					}
 				}
 				catch (const boost::property_tree::ptree_error &e)
 				{

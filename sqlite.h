@@ -22,6 +22,8 @@
 #include <string>
 #include "sqlite3\sqlite3.h"
 
+#include "statement.h"
+
 class sqlite
 {
 public:
@@ -35,6 +37,8 @@ public:
 	const char * get_err_msg();
 
 	int exec_simple(const char *sql);
+
+	void addStatementFromConfig();
 
 	void setName(std::string name) { dbname = name; }
 	int get_rc() { return rc; }

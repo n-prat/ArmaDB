@@ -241,7 +241,7 @@ namespace UnitTest3
 		{
 			ConfigParser cfg;
 			cfg.read_config("config.ini");
-			cfg.check_config();
+			cfg.load_config();
 			std::string str = cfg.get_err_msg();
 
 			Assert::AreEqual("Config file OK", str.c_str(), 0.01, L"read_config_Value3 failed", LINE_INFO());

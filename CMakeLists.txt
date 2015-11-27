@@ -83,6 +83,7 @@ SET( BASE_SOURCES
 	${PROJECT_SOURCE_DIR}/stdafx.cpp
 	${PROJECT_SOURCE_DIR}/sqlite3/sqlite3.c
 	${PROJECT_SOURCE_DIR}/config.cpp
+	${PROJECT_SOURCE_DIR}/statement.cpp
 )
 SET( BASE_HEADERS	
 	${PROJECT_SOURCE_DIR}/sqlite.h
@@ -90,6 +91,7 @@ SET( BASE_HEADERS
 	${PROJECT_SOURCE_DIR}/targetver.h
 	${PROJECT_SOURCE_DIR}/sqlite3/sqlite3.h
 	${PROJECT_SOURCE_DIR}/config.h
+	${PROJECT_SOURCE_DIR}/statement.h
 )
 SET( SRCS_PLUS_MAIN "${PROJECT_SOURCE_DIR}/dllmain.cpp;${BASE_SOURCES}")
 SET( HDRS_PLUS_MAIN "${PROJECT_SOURCE_DIR}/dllmain.h;${BASE_HEADERS}")

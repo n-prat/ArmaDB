@@ -49,7 +49,6 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function)
 	sqlite sq; //TODO
 	std::string out("");
 	bool initialized = false;
-
 	ConfigParser cfg;
 
 	// Split function on delimiter ":"
@@ -73,6 +72,11 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function)
 		if (args[0].compare("SETUP") == 0) {
 			sq.setName(args[1]);
 			initialized = true;
+
+			// TODO error handling
+			cfg.read_config("config.ini");
+			cfg.load_config();
+
 			out = "SETUP ok";
 		}
 		else {
@@ -115,7 +119,7 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function)
 		}
 	}
 
-	// TODO close db
+	// close db after each use
 	if (sq.close_db()) {
 		out = sq.get_err_msg();
 	}

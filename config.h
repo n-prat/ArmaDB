@@ -33,7 +33,7 @@ public:
 
 
 	int read_config(std::string filename);
-	int check_config();
+	int load_config();
 
 	std::string get_err_msg() { return err_msg; }
 	
