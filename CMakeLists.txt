@@ -122,14 +122,16 @@ IF(WITH_TESTS AND MSVC)
 	add_library(Tests SHARED ${PROJECT_SOURCE_DIR}/UnitTest3/unittest1.cpp ${PROJECT_SOURCE_DIR}/UnitTest3/stdafx.cpp ${PROJECT_SOURCE_DIR}/UnitTest3/stdafx.h ${PROJECT_SOURCE_DIR}/UnitTest3/targetver.h)
 	target_link_libraries(Tests "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/UnitTest/lib/Microsoft.VisualStudio.TestTools.CppUnitTestFramework.lib")
 	target_link_libraries(Tests debug ${Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG} optimized ${Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE} )
-	target_link_libraries(Tests debug ${PROJECT_BINARY_DIR}/Debug/armadb_static.lib optimized ${PROJECT_BINARY_DIR}/Release/armadb_static.lib)	
+	#target_link_libraries(Tests debug ${PROJECT_BINARY_DIR}/Debug/armadb_static.lib optimized ${PROJECT_BINARY_DIR}/Release/armadb_static.lib)	
+	target_link_libraries(Tests armadb_static)
 ENDIF(WITH_TESTS AND MSVC)
 
 
 ## OPTION build SHARED dll with entry point renamed to RVExtension_Dev
 IF(WITH_A3DLLPROXY)	
 	add_library(armadb_dev SHARED ${PROJECT_SOURCE_DIR}/dllmain-dev.cpp ${PROJECT_SOURCE_DIR}/dllmain-dev.h )
-	target_link_libraries(armadb_dev debug ${PROJECT_BINARY_DIR}/Debug/armadb_static.lib optimized ${PROJECT_BINARY_DIR}/Release/armadb_static.lib)	
+	#target_link_libraries(armadb_dev debug ${PROJECT_BINARY_DIR}/Debug/armadb_static.lib optimized ${PROJECT_BINARY_DIR}/Release/armadb_static.lib)	
+	target_link_libraries(armadb_dev armadb_static)	
 	#target_link_libraries(armadb_dev debug ${Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG} optimized ${Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE} )
 ENDIF(WITH_A3DLLPROXY)	
 
