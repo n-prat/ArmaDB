@@ -18,6 +18,7 @@
 */
 
 #include "stdafx.h"
+#include <boost/format.hpp>
 #include "../sqlite.h"
 #include "../config.h"
 #include "../dllmain.h"

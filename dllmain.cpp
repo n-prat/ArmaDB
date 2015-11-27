@@ -20,10 +20,11 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "stdafx.h"
 
-
-#include "config.h"
 #include "dllmain.h"
-
+#include <boost/format.hpp>
+#include "easylogging++.h"
+#include "sqlite.h"
+#include "config.h"
 
 INITIALIZE_EASYLOGGINGPP
 

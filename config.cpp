@@ -18,6 +18,9 @@
 */
 
 #include "config.h"
+#include <iostream>
+#include <boost/property_tree/ini_parser.hpp>
+#include <boost/format.hpp>
 
 ConfigParser::ConfigParser()
 {		

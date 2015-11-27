@@ -19,11 +19,6 @@
 
 #pragma once
 
-#include "config.h"
-#include "sqlite.h"
-#include "easylogging++.h"
-//#include <boost/program_options/parsers.hpp>
-
 #define MAJOR 0
 #define MINOR 0
 #define REVISION 1

@@ -21,7 +21,6 @@
 
 #include <string>
 #include "sqlite3\sqlite3.h"
-
 #include "statement.h"
 
 class sqlite
