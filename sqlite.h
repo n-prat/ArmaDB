@@ -26,20 +26,22 @@ class sqlite
 {
 public:
 	sqlite();
+	sqlite(std::string filename);
 	~sqlite();
 
-	int setup_open(std::string filename);
-	int setup_create(std::string filename);
+	int open();	
 
 	int close_db();
 	const char * get_err_msg();
 
 	int exec_simple(const char *sql);
 
+	void setName(std::string name) { dbname = name; }
 	int get_rc() { return rc; }
 private:
 	bool sql_custom_only;
 	sqlite3 *db;
+	std::string dbname;
 	char *zErrMsg;
 	int rc;
 };

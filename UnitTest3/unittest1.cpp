@@ -61,32 +61,46 @@ namespace UnitTest3
 			Assert::AreEqual("RESULT too", out, 0.01, L"output_size_too_big failed", LINE_INFO());
 		}
 
+		TEST_METHOD(setup)
+		{
+			char out[OUTPUTSIZE], fun[] = "SETUP:name";
+			RVExtension(out, OUTPUTSIZE, fun);
+			Assert::AreEqual("SETUP ok", out, 0.01, L"setup failed", LINE_INFO());
+		}
+
+		TEST_METHOD(initialized)
+		{
+			char out[OUTPUTSIZE], fun[] = "SETUP:name";
+			RVExtension(out, OUTPUTSIZE, fun);
+			Assert::AreEqual("SETUP ok", out, 0.01, L"setup failed", LINE_INFO());
+		}
+
+		TEST_METHOD(not_initialized)
+		{
+			char out[OUTPUTSIZE], fun[] = "SETUP:ljknghfjhokoredkhdhlk";
+			RVExtension(out, OUTPUTSIZE, fun);
+			Assert::AreEqual("SETUP ok", out, 0.01, L"setup failed", LINE_INFO());
+		}
+		
 		TEST_METHOD(too_many_args)
 		{
 			char out[OUTPUTSIZE], fun[] = "sdf:aze:hg:xcv:jgh:oiu:qsd:xcv:ytuiy:sdfsfdg";
 			RVExtension(out, OUTPUTSIZE, fun);
 			Assert::AreEqual("INPUT not recognized", out, 0.01, L"too_many_args failed", LINE_INFO());
 		}
-
+		
 		TEST_METHOD(two_args_not_valid)
 		{
 			char out[OUTPUTSIZE], fun[] = "sdf:aze";
 			RVExtension(out, OUTPUTSIZE, fun);
-			Assert::AreEqual("SETUP command invalid: USAGE: OPEN:filename or OPENCREATE:filename", out, 0.01, L"two_args_not_valid failed", LINE_INFO());
+			Assert::AreEqual("SETUP command invalid: USAGE: SETUP:name", out, 0.01, L"two_args_not_valid failed", LINE_INFO());
 		}
-
+		
 		TEST_METHOD(two_args_valid1)
 		{
-			char out[OUTPUTSIZE], fun[] = "OPEN:filename";
+			char out[OUTPUTSIZE], fun[] = "SETUP:pofldg";
 			RVExtension(out, OUTPUTSIZE, fun);
-			Assert::AreEqual("OPEN ok", out, 0.01, L"two_args_valid1 failed", LINE_INFO());
-		}
-
-		TEST_METHOD(two_args_valid2)
-		{
-			char out[OUTPUTSIZE], fun[] = "OPENCREATE:filename";
-			RVExtension(out, OUTPUTSIZE, fun);
-			Assert::AreEqual("OPENCREATE ok", out, 0.01, L"two_args_valid2 failed", LINE_INFO());
+			Assert::AreEqual("SETUP ok", out, 0.01, L"two_args_valid1 failed", LINE_INFO());
 		}
 
 		TEST_METHOD(split_to_container_1)
@@ -111,53 +125,19 @@ namespace UnitTest3
 			Assert::AreEqual(3, fields.size(), 0.01, L"split_to_container_2 failed", LINE_INFO());
 		}				
 	};
-
-	TEST_CLASS(SQliteOpen0)
-	{
-	public:
-		TEST_METHOD(sqlite_setup_open_does_not_exist)
-		{
-			sqlite sq;
-			std::string filename = "plop";
-
-			sq.setup_open(filename);
-			Assert::AreEqual("unable to open database file", sq.get_err_msg(), 0.01, L"sqlite_setup_open_does_not_exist failed", LINE_INFO());
-		}
-	};
-
-	TEST_CLASS(SQliteOpen1)
-	{
-	public:
-		TEST_METHOD(sqlite_setup_create)
-		{
-			sqlite sq;
-			std::string filename = "plop.db";
-
-			sq.setup_create(filename);
-			Assert::AreEqual("not an error", sq.get_err_msg(), 0.01, L"sqlite_setup_create failed", LINE_INFO());
-		}
-	};
-
-	TEST_CLASS(SQliteOpen2)
-	{
-	public:
-		TEST_METHOD(sqlite_setup_open_exists)
-		{
-			sqlite sq;
-			std::string filename = "plop.db";
-
-			sq.setup_open(filename);
-			Assert::AreEqual("not an error", sq.get_err_msg(), 0.01, L"sqlite_setup_open_exists failed", LINE_INFO());
-		}
-	};
+		
 
 	TEST_CLASS(SQliteSQLsimple)
 	{
 	public:
+		
 		TEST_METHOD(sqlite_simple_read_exists)
 		{
 			sqlite sq;
-			sq.setup_create("plop.db");
+			//sq.setup_create("plop.db");
+			sq.setName("plop.db");
+			sq.open();
+
 			sq.exec_simple("CREATE TABLE examp(id int PRIMARY KEY, positions text, directions text);");
 			sq.exec_simple("SELECT * FROM examp;");
 			Assert::AreEqual("not an error", sq.get_err_msg(), 0.01, L"sqlite_simple failed", LINE_INFO());
@@ -166,7 +146,9 @@ namespace UnitTest3
 		TEST_METHOD(sqlite_simple_read_not_exists)
 		{
 			sqlite sq;
-			sq.setup_create("plop.db");
+			//sq.setup_create("plop.db");
+			sq.setName("plop.db");
+			sq.open();
 
 			sq.exec_simple("SELECT * FROM examp2;");
 			Assert::AreEqual("SQL logic error or missing database", sq.get_err_msg(), 0.01, L"sqlite_simple failed", LINE_INFO());
@@ -177,7 +159,9 @@ namespace UnitTest3
 		TEST_METHOD(sqlite_create_table_2times)
 		{
 			sqlite sq;
-			sq.setup_create("plop.db");
+			//sq.setup_create("plop.db");
+			sq.setName("plop.db");
+			sq.open();
 
 			sq.exec_simple("CREATE TABLE races2(id int PRIMARY KEY, positions text, directions text);");
 			sq.exec_simple("CREATE TABLE races2(id int PRIMARY KEY, positions text, directions text);");
@@ -187,12 +171,15 @@ namespace UnitTest3
 		TEST_METHOD(sqlite_create_ifnotexists)
 		{
 			sqlite sq;
-			sq.setup_create("plop.db");
+			//sq.setup_create("plop.db");
+			sq.setName("plop.db");
+			sq.open();
 
 			sq.exec_simple("CREATE TABLE IF NOT EXISTS races0(id int PRIMARY KEY, positions text, directions text);");
 			sq.exec_simple("CREATE TABLE IF NOT EXISTS races0(id int PRIMARY KEY, positions text, directions text);");
 			Assert::AreEqual("not an error", sq.get_err_msg(), 0.01, L"sqlite_create_ifnotexists failed", LINE_INFO());
 		}
+		
 	};
 
 	TEST_CLASS(SQliteClose)

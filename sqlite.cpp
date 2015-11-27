@@ -21,14 +21,22 @@
 
 #include "sqlite.h"
 
-
-
 sqlite::sqlite()
 {
 	db = NULL;
 	zErrMsg = "error";
 	rc = -1;
 	sql_custom_only = true;
+	dbname = "";
+}
+
+sqlite::sqlite(std::string filename)
+{
+	db = NULL;
+	zErrMsg = "error";
+	rc = -1;
+	sql_custom_only = true;
+	dbname = filename;
 }
 
 
@@ -36,24 +44,10 @@ sqlite::~sqlite()
 {
 }
 
-int sqlite::setup_open(std::string filename)
-{	
+int sqlite::open()
+{
 
-	rc = sqlite3_open_v2(filename.c_str(), &db, SQLITE_OPEN_READWRITE, nullptr);
-	if (rc) {
-		// Error opening DB
-		sqlite3_close(db);
-	}
-
-	// TODO
-	// stuff
-	return rc;
-}
-
-int sqlite::setup_create(std::string filename)
-{	
-
-	rc = sqlite3_open_v2(filename.c_str(), &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE,nullptr);
+	rc = sqlite3_open_v2(dbname.c_str(), &db, SQLITE_OPEN_READWRITE, nullptr);
 	if (rc) {
 		// Error opening DB
 		sqlite3_close(db);

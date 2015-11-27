@@ -80,6 +80,7 @@ int ConfigParser::check_config()
 			boost::format sql_i("SQL_%1%");
 
 			// range is SQL_1, SQL_2...
+			//TODO iterate directly on the nodes
 			for (int i = 1; i <= sql_custom_queries; i++) {
 				// update the format
 				sql_i % i;
