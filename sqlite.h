@@ -20,7 +20,7 @@
 #pragma once
 
 #include <string>
-#include "sqlite3\sqlite3.h"
+#include "sqlite3/sqlite3.h"
 #include "statement.h"
 
 class sqlite
@@ -45,7 +45,7 @@ private:
 	bool sql_custom_only;
 	sqlite3 *db;
 	std::string dbname;
-	char *zErrMsg;
+	std::string zErrMsg;
 	int rc;
 };
 

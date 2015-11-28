@@ -71,7 +71,8 @@ IF(WIN32)
 	#set_source_files_properties(${PROJECT_SOURCE_DIR}/sqlite3/sqlite3.c PROPERTIES COMPILE_FLAGS /Y-)
 ELSE(WIN32)
 	add_definitions(-DUNIX)
-	add_compile_options(-Wall -Werror) # Wall + Werror
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+	add_compile_options(-Wall -Wextra -Werror) # Wall + Werror
 ENDIF(WIN32)
 
 OPTION( WITH_A3DLLPROXY "Rename RVExtension to RVExtension_Dev" OFF )

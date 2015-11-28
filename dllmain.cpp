@@ -21,6 +21,7 @@
 #include "stdafx.h"
 
 #include "dllmain.h"
+#include <cstring>
 #include <boost/format.hpp>
 #include "easylogging++.h"
 #include "sqlite.h"
@@ -28,6 +29,7 @@
 
 INITIALIZE_EASYLOGGINGPP
 
+#ifdef _WIN32
 BOOL APIENTRY DllMain(HMODULE,
 	DWORD  ul_reason_for_call,
 	LPVOID
@@ -43,9 +45,13 @@ BOOL APIENTRY DllMain(HMODULE,
 	}
 	return TRUE;
 }
+#endif
 
-//void __stdcall RVExtension(char *output, int outputSize, const char *function)
+#ifdef _WIN32
 void __stdcall RVExtension(char *output, int outputSize, const char *function)
+#else
+void RVExtension(char *output, int outputSize, const char *function)
+#endif
 {
 	sqlite sq; //TODO
 	std::string out("");
@@ -134,8 +140,10 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function)
 	}
 	
 	// Send back the result
-	strncpy_s(output, outputSize, out.c_str(), _TRUNCATE);
+	//std::strncpy_s(output, outputSize, out.c_str());
 	//strncpy(output, out.c_str(), outputSize);
+	//strcpy_s(output, outputSize, out.c_str());
+	std::strncpy(output, out.c_str(), out.size());
 }
 
 

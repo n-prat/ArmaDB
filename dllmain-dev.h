@@ -23,7 +23,11 @@
 #include "dllmain.h"
 
 // test ingame : hint ("Arma_db" callExtension "");
+#ifdef _WIN32
 extern "C"
 {
-	__declspec (dllexport) void __stdcall RVExtension_Dev(char *output, int outputSize, const char *function);
+        __declspec (dllexport) void __stdcall RVExtension(char *output, int outputSize, const char *function);
 }
+#else
+        void RVExtension(char *output, int outputSize, const char *function);
+#endif

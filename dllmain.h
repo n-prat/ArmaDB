@@ -24,10 +24,14 @@
 #define REVISION 1
 
 // test ingame : hint ("Arma_db" callExtension "");
+#ifdef _WIN32
 extern "C"
 {
 	__declspec (dllexport) void __stdcall RVExtension(char *output, int outputSize, const char *function);
 }
+#else
+	void RVExtension(char *output, int outputSize, const char *function);
+#endif
 
 // Split string into a container
 // http://www.cplusplus.com/faq/sequences/strings/split/#string-find_first_of
@@ -44,8 +48,8 @@ Container& split_to_container(
 	split::empties_t                      empties = split::empties_ok)
 {
 	result.clear();
-	size_t current;
-	int next = -1;
+	unsigned int current;
+	unsigned int next = 0;
 	do
 	{
 		if (empties == split::no_empties)
