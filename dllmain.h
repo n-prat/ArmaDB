@@ -45,7 +45,7 @@ Container& split_to_container(
 {
 	result.clear();
 	size_t current;
-	size_t next = -1;
+	int next = -1;
 	do
 	{
 		if (empties == split::no_empties)

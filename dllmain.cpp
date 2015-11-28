@@ -28,9 +28,9 @@
 
 INITIALIZE_EASYLOGGINGPP
 
-BOOL APIENTRY DllMain(HMODULE hModule,
+BOOL APIENTRY DllMain(HMODULE,
 	DWORD  ul_reason_for_call,
-	LPVOID lpReserved
+	LPVOID
 	)
 {
 	switch (ul_reason_for_call)
@@ -129,7 +129,7 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function)
 
 
 	// Size check
-	if (out.size() >= outputSize) {
+	if (out.size() >= (size_t) outputSize) {
 		out = "RESULT too big : > outputSize";
 	}
 	

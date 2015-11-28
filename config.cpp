@@ -111,7 +111,8 @@ int ConfigParser::load_config()
 				catch (const boost::property_tree::ptree_error &e)
 				{
 					ret = 2;
-					err_msg = "[config] invalid sql custom";
+					err_msg = "[config] invalid sql custom : ";
+					err_msg.append(e.what());
 					break;
 				}
 			}

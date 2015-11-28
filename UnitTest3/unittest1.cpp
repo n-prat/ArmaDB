@@ -50,12 +50,8 @@ namespace UnitTest3
 				expected.c_str(),
 				// Actual value:
 				out,
-				// Tolerance:
-				0.01,
 				// Message:
-				L"version check failed",
-				// Line number - used if there is no PDB file:
-				LINE_INFO());
+				L"version check failed");
 		}
 
 		TEST_METHOD(output_size_too_big)
@@ -63,49 +59,49 @@ namespace UnitTest3
 			char out[OUTPUTSIZE], fun[] = "sdf:aze:hg:xcv:jgh:oiu:qsd:xcv:ytuiy:sdfsfdg";
 			RVExtension(out, 11, fun);
 			// "RESULT too big : > outputSize"
-			Assert::AreEqual("RESULT too", out, 0.01, L"output_size_too_big failed", LINE_INFO());
+			Assert::AreEqual("RESULT too", out, L"output_size_too_big failed");
 		}
 
 		TEST_METHOD(setup)
 		{
 			char out[OUTPUTSIZE], fun[] = "SETUP:name";
 			RVExtension(out, OUTPUTSIZE, fun);
-			Assert::AreEqual("SETUP ok", out, 0.01, L"setup failed", LINE_INFO());
+			Assert::AreEqual("SETUP ok", out, L"setup failed");
 		}
 
 		TEST_METHOD(initialized)
 		{
 			char out[OUTPUTSIZE], fun[] = "SETUP:name";
 			RVExtension(out, OUTPUTSIZE, fun);
-			Assert::AreEqual("SETUP ok", out, 0.01, L"setup failed", LINE_INFO());
+			Assert::AreEqual("SETUP ok", out, L"setup failed");
 		}
 
 		TEST_METHOD(not_initialized)
 		{
 			char out[OUTPUTSIZE], fun[] = "SETUP:ljknghfjhokoredkhdhlk";
 			RVExtension(out, OUTPUTSIZE, fun);
-			Assert::AreEqual("SETUP ok", out, 0.01, L"setup failed", LINE_INFO());
+			Assert::AreEqual("SETUP ok", out, L"setup failed");
 		}
 		
 		TEST_METHOD(too_many_args)
 		{
 			char out[OUTPUTSIZE], fun[] = "sdf:aze:hg:xcv:jgh:oiu:qsd:xcv:ytuiy:sdfsfdg";
 			RVExtension(out, OUTPUTSIZE, fun);
-			Assert::AreEqual("INPUT not recognized", out, 0.01, L"too_many_args failed", LINE_INFO());
+			Assert::AreEqual("INPUT not recognized", out, L"too_many_args failed");
 		}
 		
 		TEST_METHOD(two_args_not_valid)
 		{
 			char out[OUTPUTSIZE], fun[] = "sdf:aze";
 			RVExtension(out, OUTPUTSIZE, fun);
-			Assert::AreEqual("SETUP command invalid: USAGE: SETUP:name", out, 0.01, L"two_args_not_valid failed", LINE_INFO());
+			Assert::AreEqual("SETUP command invalid: USAGE: SETUP:name", out, L"two_args_not_valid failed");
 		}
 		
 		TEST_METHOD(two_args_valid1)
 		{
 			char out[OUTPUTSIZE], fun[] = "SETUP:pofldg";
 			RVExtension(out, OUTPUTSIZE, fun);
-			Assert::AreEqual("SETUP ok", out, 0.01, L"two_args_valid1 failed", LINE_INFO());
+			Assert::AreEqual("SETUP ok", out, L"two_args_valid1 failed");
 		}
 
 		TEST_METHOD(split_to_container_1)
@@ -116,7 +112,7 @@ namespace UnitTest3
 			std::vector<std::string> fields;
 			split_to_container(fields, str_test, ":", split::no_empties);
 
-			Assert::AreNotEqual(3, fields.size(), 0.01, L"split_to_container_1 failed", LINE_INFO());
+			Assert::AreNotEqual(3, fields.size(), 0.01, L"split_to_container_1 failed");
 		}
 
 		TEST_METHOD(split_to_container_2)
@@ -127,7 +123,7 @@ namespace UnitTest3
 			std::vector<std::string> fields;
 			split_to_container(fields, str_test, ":", split::no_empties);
 
-			Assert::AreEqual(3, fields.size(), 0.01, L"split_to_container_2 failed", LINE_INFO());
+			Assert::AreEqual(3, fields.size(), 0.01, L"split_to_container_2 failed");
 		}				
 	};
 		
@@ -145,7 +141,7 @@ namespace UnitTest3
 
 			sq.exec_simple("CREATE TABLE examp(id int PRIMARY KEY, positions text, directions text);");
 			sq.exec_simple("SELECT * FROM examp;");
-			Assert::AreEqual("not an error", sq.get_err_msg(), 0.01, L"sqlite_simple failed", LINE_INFO());
+			Assert::AreEqual("not an error", sq.get_err_msg(), L"sqlite_simple failed");
 		}
 
 		TEST_METHOD(sqlite_simple_read_not_exists)
@@ -156,7 +152,7 @@ namespace UnitTest3
 			sq.open();
 
 			sq.exec_simple("SELECT * FROM examp2;");
-			Assert::AreEqual("SQL logic error or missing database", sq.get_err_msg(), 0.01, L"sqlite_simple failed", LINE_INFO());
+			Assert::AreEqual("SQL logic error or missing database", sq.get_err_msg(), L"sqlite_simple failed");
 		}
 
 		// CREATE TABLE examp(one text, two int);
@@ -170,7 +166,7 @@ namespace UnitTest3
 
 			sq.exec_simple("CREATE TABLE races2(id int PRIMARY KEY, positions text, directions text);");
 			sq.exec_simple("CREATE TABLE races2(id int PRIMARY KEY, positions text, directions text);");
-			Assert::AreEqual("SQL logic error or missing database", sq.get_err_msg(), 0.01, L"sqlite_create_table_2times failed", LINE_INFO());
+			Assert::AreEqual("SQL logic error or missing database", sq.get_err_msg(), L"sqlite_create_table_2times failed");
 		}
 
 		TEST_METHOD(sqlite_create_ifnotexists)
@@ -182,7 +178,7 @@ namespace UnitTest3
 
 			sq.exec_simple("CREATE TABLE IF NOT EXISTS races0(id int PRIMARY KEY, positions text, directions text);");
 			sq.exec_simple("CREATE TABLE IF NOT EXISTS races0(id int PRIMARY KEY, positions text, directions text);");
-			Assert::AreEqual("not an error", sq.get_err_msg(), 0.01, L"sqlite_create_ifnotexists failed", LINE_INFO());
+			Assert::AreEqual("not an error", sq.get_err_msg(), L"sqlite_create_ifnotexists failed");
 		}
 		
 	};
@@ -196,7 +192,7 @@ namespace UnitTest3
 			std::string filename = "plop.db";
 
 			sq.close_db();
-			Assert::AreEqual("not an error", sq.get_err_msg(), 0.01, L"sqlite_close_exists failed", LINE_INFO());
+			Assert::AreEqual("not an error", sq.get_err_msg(), L"sqlite_close_exists failed");
 		}
 		
 	};
@@ -210,7 +206,7 @@ namespace UnitTest3
 			cfg.read_config("config.ini");
 			std::string str = cfg.get_pt().get<std::string>("Section1.Value1");
 			
-			Assert::AreEqual("plop", str.c_str(), 0.01, L"read_config_Value1 failed", LINE_INFO());
+			Assert::AreEqual("plop", str.c_str(), L"read_config_Value1 failed");
 		}
 
 		TEST_METHOD(read_config_Value2_with_whitespaces)
@@ -219,7 +215,7 @@ namespace UnitTest3
 			cfg.read_config("config.ini");
 			std::string str = cfg.get_pt().get<std::string>("Section1.Value2");
 
-			Assert::AreEqual("that is a multitoken value", str.c_str(), 0.01, L"read_config_Value2_with_whitespaces failed", LINE_INFO());
+			Assert::AreEqual("that is a multitoken value", str.c_str(), L"read_config_Value2_with_whitespaces failed");
 		}
 
 		TEST_METHOD(read_config_Value3)
@@ -228,7 +224,7 @@ namespace UnitTest3
 			cfg.read_config("config.ini");
 			std::string str = cfg.get_pt().get<std::string>("Section1.Value3");
 
-			Assert::AreEqual("that contains a;", str.c_str(), 0.01, L"read_config_Value3 failed", LINE_INFO());
+			Assert::AreEqual("that contains a;", str.c_str(), L"read_config_Value3 failed");
 		}
 
 		// TODO multiline parsing
@@ -249,7 +245,7 @@ namespace UnitTest3
 			cfg.load_config();
 			std::string str = cfg.get_err_msg();
 
-			Assert::AreEqual("Config file OK", str.c_str(), 0.01, L"read_config_Value3 failed", LINE_INFO());
+			Assert::AreEqual("Config file OK", str.c_str(), L"read_config_Value3 failed");
 		}
 	};
 }
