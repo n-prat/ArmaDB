@@ -22,7 +22,10 @@
 
 #include "dllmain.h"
 #include <cstring>
+#include <boost/algorithm/string/constants.hpp>
 #include <boost/format.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/classification.hpp>
 #include "easylogging++.h"
 #include "sqlite.h"
 #include "config.h"
@@ -52,28 +55,29 @@ void __stdcall RVExtension(char *output, int outputSize, const char *function)
 #else
 void RVExtension(char *output, int outputSize, const char *function)
 #endif
-{
-	sqlite sq; //TODO
+{		
+	sqlite sq;
 	std::string out("");
 	bool initialized = false;
 	ConfigParser cfg;
 
 	// Split function on delimiter ":"
+	// store the result in "args"
 	std::string str_args(function);
-
-	// Split the input and store the result in "args"
 	std::vector<std::string> args;
-	split_to_container(args, str_args, ":", split::no_empties);
+	boost::split( args, str_args, boost::is_any_of(": "), boost::token_compress_on);
 	int nb_args = args.size();
 
 	// Parse argument
-	if (nb_args == 0) {
-		// Version number if no argument
-		LOG(DEBUG) << "[armadb] empty args";
-		//strncpy_s(output, outputSize, "Hello World!!", _TRUNCATE);
-		out = "[armadb] version ";		
-		std::string version_string = boost::str(boost::format(" %1%.%2%.%3%") % MAJOR % MINOR % REVISION);
-		out.append(version_string);
+	if (nb_args == 1) {
+		if (args[0].compare("version") == 0) {
+			// Version number if no argument
+			LOG(DEBUG) << "[armadb] version";
+			//strncpy_s(output, outputSize, "Hello World!!", _TRUNCATE);
+			out = "[armadb] version ";
+			std::string version_string = boost::str(boost::format(" %1%.%2%.%3%") % MAJOR % MINOR % REVISION);
+			out.append(version_string);
+		}
 	}
 	else if (nb_args == 2) {
 		//		input : "SETUP:dbname"
@@ -83,8 +87,12 @@ void RVExtension(char *output, int outputSize, const char *function)
 			initialized = true;
 
 			// TODO error handling
-			cfg.read_config("config.ini");
-			cfg.load_config();
+			if (cfg.read_config("config.ini")) {
+				out = "SETUP: can't read config file";
+			}
+			if (cfg.load_config()) {
+				out = cfg.get_err_msg();
+			}
 
 			out = "SETUP ok";
 		}
@@ -133,17 +141,16 @@ void RVExtension(char *output, int outputSize, const char *function)
 		out = sq.get_err_msg();
 	}
 
-
+	// Send back the result
 	// Size check
 	if (out.size() >= (size_t) outputSize) {
-		out = "RESULT too big : > outputSize";
+		output = "";
+		//TODO log error		
 	}
-	
-	// Send back the result
-	//std::strncpy_s(output, outputSize, out.c_str());
-	//strncpy(output, out.c_str(), outputSize);
-	//strcpy_s(output, outputSize, out.c_str());
-	std::strncpy(output, out.c_str(), out.size());
+	else {
+		std::size_t length = out.copy(output, out.size(), 0);
+		output[length] = '\0';
+	}
 }
 
 

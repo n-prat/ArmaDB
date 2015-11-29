@@ -22,11 +22,10 @@
 #include "dllmain-dev.h"
 
 #ifdef _WIN32
-void __stdcall RVExtension(char *output, int outputSize, const char *function)
+void __stdcall RVExtension_Dev(char *output, int outputSize, const char *function)
 #else
-void RVExtension(char *output, int outputSize, const char *function)
+void RVExtension_Dev(char *output, int outputSize, const char *function)
 #endif
-
 {
 	//__declspec (dllimport) void __stdcall RVExtension(char *output, int outputSize, const char *function);
 	// call 

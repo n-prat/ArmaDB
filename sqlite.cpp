@@ -47,7 +47,7 @@ sqlite::~sqlite()
 int sqlite::open()
 {
 
-	rc = sqlite3_open_v2(dbname.c_str(), &db, SQLITE_OPEN_READWRITE, nullptr);
+	rc = sqlite3_open_v2(dbname.c_str(), &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, nullptr);
 	if (rc) {
 		// Error opening DB
 		sqlite3_close(db);

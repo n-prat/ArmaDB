@@ -38,7 +38,7 @@ namespace UnitTest3
 		// If "function" arg is empty, should reply "[armadb] version VERSION"
 		TEST_METHOD(version)
 		{			
-			char out[OUTPUTSIZE], *fun = "";
+			char out[OUTPUTSIZE], *fun = "version";
 
 			std::string expected = "[armadb] version ";
 			std::string version_string = boost::str(boost::format(" %1%.%2%.%3%") % MAJOR % MINOR % REVISION);
@@ -59,7 +59,7 @@ namespace UnitTest3
 			char out[OUTPUTSIZE], fun[] = "sdf:aze:hg:xcv:jgh:oiu:qsd:xcv:ytuiy:sdfsfdg";
 			RVExtension(out, 11, fun);
 			// "RESULT too big : > outputSize"
-			Assert::AreEqual("RESULT too", out, L"output_size_too_big failed");
+			Assert::AreEqual("", out, L"output_size_too_big failed");
 		}
 
 		TEST_METHOD(setup)
@@ -102,29 +102,7 @@ namespace UnitTest3
 			char out[OUTPUTSIZE], fun[] = "SETUP:pofldg";
 			RVExtension(out, OUTPUTSIZE, fun);
 			Assert::AreEqual("SETUP ok", out, L"two_args_valid1 failed");
-		}
-
-		TEST_METHOD(split_to_container_1)
-		{			
-			const char *function = "dfgfd:xcwb:poiuyt:dsgf";
-			std::string str_test(function);
-
-			std::vector<std::string> fields;
-			split_to_container(fields, str_test, ":", split::no_empties);
-
-			Assert::AreNotEqual(3, fields.size(), 0.01, L"split_to_container_1 failed");
-		}
-
-		TEST_METHOD(split_to_container_2)
-		{
-			const char *function = "dfgfd:xcwb::poiuyt";
-			std::string str_test(function);
-
-			std::vector<std::string> fields;
-			split_to_container(fields, str_test, ":", split::no_empties);
-
-			Assert::AreEqual(3, fields.size(), 0.01, L"split_to_container_2 failed");
-		}				
+		}		
 	};
 		
 
@@ -157,30 +135,15 @@ namespace UnitTest3
 
 		// CREATE TABLE examp(one text, two int);
 		// .tables; .schema; SELECT * FROM truc;
-		TEST_METHOD(sqlite_create_table_2times)
+		TEST_METHOD(sqlite_create_table)
 		{
 			sqlite sq;
-			//sq.setup_create("plop.db");
 			sq.setName("plop.db");
 			sq.open();
 
 			sq.exec_simple("CREATE TABLE races2(id int PRIMARY KEY, positions text, directions text);");
-			sq.exec_simple("CREATE TABLE races2(id int PRIMARY KEY, positions text, directions text);");
-			Assert::AreEqual("SQL logic error or missing database", sq.get_err_msg(), L"sqlite_create_table_2times failed");
-		}
-
-		TEST_METHOD(sqlite_create_ifnotexists)
-		{
-			sqlite sq;
-			//sq.setup_create("plop.db");
-			sq.setName("plop.db");
-			sq.open();
-
-			sq.exec_simple("CREATE TABLE IF NOT EXISTS races0(id int PRIMARY KEY, positions text, directions text);");
-			sq.exec_simple("CREATE TABLE IF NOT EXISTS races0(id int PRIMARY KEY, positions text, directions text);");
-			Assert::AreEqual("not an error", sq.get_err_msg(), L"sqlite_create_ifnotexists failed");
-		}
-		
+			Assert::AreEqual("SQL logic error or missing database", sq.get_err_msg(), L"sqlite_create_table failed");
+		}		
 	};
 
 	TEST_CLASS(SQliteClose)
@@ -199,53 +162,15 @@ namespace UnitTest3
 
 	TEST_CLASS(ConfigFile)
 	{
-	public:
-		TEST_METHOD(read_config_Value1)
-		{
-			ConfigParser cfg;
-			cfg.read_config("config.ini");
-			std::string str = cfg.get_pt().get<std::string>("Section1.Value1");
-			
-			Assert::AreEqual("plop", str.c_str(), L"read_config_Value1 failed");
-		}
-
-		TEST_METHOD(read_config_Value2_with_whitespaces)
-		{
-			ConfigParser cfg;
-			cfg.read_config("config.ini");
-			std::string str = cfg.get_pt().get<std::string>("Section1.Value2");
-
-			Assert::AreEqual("that is a multitoken value", str.c_str(), L"read_config_Value2_with_whitespaces failed");
-		}
-
-		TEST_METHOD(read_config_Value3)
-		{
-			ConfigParser cfg;
-			cfg.read_config("config.ini");
-			std::string str = cfg.get_pt().get<std::string>("Section1.Value3");
-
-			Assert::AreEqual("that contains a;", str.c_str(), L"read_config_Value3 failed");
-		}
-
-		// TODO multiline parsing
-		/*
-		TEST_METHOD(read_config_Value4)
-		{
-			ConfigParser cfg;
-			cfg.read_config("config.ini");
-			std::string str = cfg.get_pt().get<std::string>("Section1.Value4");
-
-			Assert::AreEqual("that contains a;", str.c_str(), 0.01, L"read_config_Value4 failed", LINE_INFO());
-		}*/
-
+	public:	
 		TEST_METHOD(config_check)
 		{
 			ConfigParser cfg;
-			cfg.read_config("config.ini");
+			cfg.read_config("../../tests/config.ini");
 			cfg.load_config();
 			std::string str = cfg.get_err_msg();
 
-			Assert::AreEqual("Config file OK", str.c_str(), L"read_config_Value3 failed");
+			Assert::AreEqual("Config file OK", str.c_str(), L"config_check failed");
 		}
 	};
 }

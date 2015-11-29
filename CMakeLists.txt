@@ -66,7 +66,7 @@ IF(WIN32)
 	set_source_files_properties(${PROJECT_SOURCE_DIR}/sqlite3/sqlite3.c COMPILE_FLAGS /W3)
 	
 	#add_compile_options(/MP /INCREMENTAL) # Build with Multiple Processes + Incremental
-	add_compile_options(/Gm) # Minimal Rebuild
+	add_compile_options(/Gm /Zi) # Minimal Rebuild
 	#add_definitions(/Yc"stdafx.h") #precompiled headers
 	#set_source_files_properties(${PROJECT_SOURCE_DIR}/sqlite3/sqlite3.c PROPERTIES COMPILE_FLAGS /Y-)
 ELSE(WIN32)

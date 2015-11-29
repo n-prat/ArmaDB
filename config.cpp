@@ -35,13 +35,11 @@ ConfigParser::~ConfigParser()
 
 int ConfigParser::read_config(std::string filename)
 {
-	int ret = -1;	
-	std::string path = filename;
+	int ret = -1;		
 
 	try
-	{		
-		path = "config.ini";
-		boost::property_tree::ini_parser::read_ini(path, pt);
+	{				
+		boost::property_tree::ini_parser::read_ini(filename, pt);
 		ret = 0;
 	}
 	catch (const std::exception e)
