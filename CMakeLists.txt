@@ -67,6 +67,8 @@ IF(WIN32)
 	
 	#add_compile_options(/MP /INCREMENTAL) # Build with Multiple Processes + Incremental
 	add_compile_options(/Gm /Zi) # Minimal Rebuild
+	add_compile_options(-D_SCL_SECURE_NO_WARNINGS) # Needed for Boost
+	add_compile_options(/EHa) # /EHsc # Yes with Extern C functions (/EHs) #Yes with SEH Exceptions (/EHa) #Yes with Extern C functions (/EHs)
 	#add_definitions(/Yc"stdafx.h") #precompiled headers
 	#set_source_files_properties(${PROJECT_SOURCE_DIR}/sqlite3/sqlite3.c PROPERTIES COMPILE_FLAGS /Y-)
 ELSE(WIN32)

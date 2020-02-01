@@ -21,6 +21,9 @@
 #include "stdafx.h"
 
 #include "dllmain.h"
+#include <stdio.h>
+#include <Windows.h>
+#include <exception>
 #include <cstring>
 #include <boost/algorithm/string/constants.hpp>
 #include <boost/format.hpp>
@@ -49,6 +52,31 @@ BOOL APIENTRY DllMain(HMODULE,
 	return TRUE;
 }
 #endif
+
+int check_segfault(char *output, int outputSize) {
+	bool segfault_detected = false;
+
+	// Requires "/EHa" option to work
+	// or use __try/__except (EXCEPTION_EXECUTE_HANDLER)
+	try
+	{
+		// TODO REMOVE (debug)
+		//volatile int *pInt = 0x00000000;
+		//*pInt = 20;
+
+		//output[0] = '\0';
+		//output[outputSize - 1] = '\0';
+		//for (int i = 0; i < outputSize;i++) output[i] = '2';
+		//memset(output, 1, outputSize*sizeof(char));
+		std::fill(output, output + (outputSize  *sizeof(char)), 5);
+	}	
+	catch(...)
+	{
+		segfault_detected = true;
+	}
+
+	return segfault_detected;
+}
 
 #ifdef _WIN32
 void __stdcall RVExtension(char *output, int outputSize, const char *function)
@@ -139,18 +167,32 @@ void RVExtension(char *output, int outputSize, const char *function)
 	// close db after each use
 	if (sq.close_db()) {
 		out = sq.get_err_msg();
+		LOG(ERROR) << "[armadb] can't close db :" << out;
 	}
 
 	// Send back the result
-	// Size check
-	if (out.size() >= (size_t) outputSize) {
-		output = "";
+	// Size check : don't forget null char
+	out.push_back('\0'); // not needed in c++11?
+	if (out.size() > (size_t) outputSize) {
+		output[0] = '\0';
 		//TODO log error		
+		LOG(ERROR) << "[armadb] result size ("<< out.size()<<") > outputSize (" << outputSize<<")";
 	}
-	else {
-		std::size_t length = out.copy(output, out.size(), 0);
-		output[length] = '\0';
+	else {	
+		if (!check_segfault(output, outputSize)) {
+			#ifdef _WIN32
+			std::size_t length = out._Copy_s(output, outputSize, out.size(), 0);
+			#else
+			std::size_t length = out.copy(output, out.size(), 0);
+			#endif
+
+			output[length] = '\0'; // not needed if '\0' is already appended to "out"
+		}
+		else {
+			LOG(ERROR) << "[armadb] SEGFAULT CAUGHT : outputSize=" << outputSize;
+		}
 	}
+	//LOG(INFO) << "[armadb] exit";
 }
 
 

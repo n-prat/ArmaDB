@@ -34,4 +34,4 @@ extern "C"
 #endif
 
 
-
+int check_segfault(char *output, int outputSize);

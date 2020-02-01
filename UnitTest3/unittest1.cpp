@@ -56,10 +56,37 @@ namespace UnitTest3
 
 		TEST_METHOD(output_size_too_big)
 		{
-			char out[OUTPUTSIZE], fun[] = "sdf:aze:hg:xcv:jgh:oiu:qsd:xcv:ytuiy:sdfsfdg";
+			char out[50], fun[] = "sdf:aze:hg:xcv:jgh:oiu:qsd:xcv:ytuiy:sdfsfdg";
 			RVExtension(out, 11, fun);
 			// "RESULT too big : > outputSize"
 			Assert::AreEqual("", out, L"output_size_too_big failed");
+		}
+
+		TEST_METHOD(output_size_segfault)
+		{			
+			char fun[] = "version";
+			char *out = (char *) malloc(sizeof(char) * 10);
+			RVExtension(out, 8000, fun);
+			Assert::AreEqual("[armadb] version 0.0.1", out, L"output_size_segfault failed");
+		}
+		
+		TEST_METHOD(segfault)
+		{			
+			size_t outputSize = 4096;
+			char *out = (char *)malloc(sizeof(char) * 4080);
+			bool ok = false;
+			memset(out, 5, outputSize);
+
+			Assert::AreEqual(true, ok, L"segfault failed");
+		}
+
+		TEST_METHOD(check__outputsize_segfault)
+		{			
+			size_t outputSize = 4000;
+			char *out = (char *)malloc(sizeof(char) * 1000);
+			int segfault = check_segfault(out, outputSize);
+			segfault = -1;
+			Assert::AreEqual(1, segfault, L"check_segfault failed");
 		}
 
 		TEST_METHOD(setup)
